@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>cblaster</title>
+		<link href="index.css" rel="stylesheet"></link>
+		<script src="d3.min.js"></script>
+	</head>
+	<body>
+		<main>
+			<div id="plot"></div>
+			<div id="div-floater">
+				<button class="collapsible active" type="button" onclick="toggleActive()">cblaster</button>
+				<div id="div-summary">
+					<p id="p-result-summary"></p>
+					<hr>
+					<p>If you found cblaster useful, please cite:</p>
+					<pre>
+						Gilchrist, C. L., Booth, T. J., van Wersch, B., van Grieken, L., Medema, M. H., & Chooi, Y. H. (2021).
+						cblaster: a remote search tool for rapid identification and visualization of homologous gene clusters.
+						<i>Bioinformatics Advances</i>, 1(1), vbab016.
+					</pre>
+					<hr>
+					<p>
+						Click clusters to hide rows, or queries to hide columns.
+						The original view can be restored using the reset filters button.
+					</p>
+					<button id="btn-save-svg">Save SVG</button>
+					<button id="btn-reset-filters">Reset filters</button>
+					<hr>
+					<p>Toggle visibility of plot elements:</p>
+					<button id="btn-toggle-counts">Hit counts</button>
+					<button id="btn-toggle-count-borders">Multi-hit cell borders</button>
+					<button id="btn-toggle-scaffolds">Genomic coordinates</button>
+					<hr>
+					<p>Toggle positions of plot elements:</p>
+					<button id="btn-toggle-multiline">Multi-line cluster information</button>
+					<button id="btn-toggle-x-axis">Query sequence names</button>
+					<hr>
+					<p>Adjust size of plot elements:</p>
+					<div>
+						<label for="input-cell-width">Cell width:</label>
+						<input
+							type="number"
+							id="input-cell-width"
+							name="cell-width"
+							min="20"
+							max="60"
+							value="44"
+							default="44"
+						>px
+					</div>
+					<div>
+						<label for="input-cell-height">Cell height:</label>
+						<input
+							type="number"
+							id="input-cell-height"
+							name="input-cell-height"
+							min="5"
+							max="40"
+							value="27"
+							default="27"
+						>px
+					</div>
+				</div>
+			</div>
+			<script>
+				const coll = document.querySelector(".collapsible");
+				const menu = document.querySelector("#div-summary");
+				function toggleActive(event) {
+					coll.classList.toggle("active");
+					menu.style.display = menu.style.display === "none" ? "block" : "none";
+				}
+			</script>
+			<script src="cblaster.js"></script>
+		</main>
+	</body>
+</html>
