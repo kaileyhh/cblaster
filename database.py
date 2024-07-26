@@ -21,6 +21,38 @@ try:
 except (ImportError, ModuleNotFoundError, sqlite3.OperationalError) as exc:
     LOG.warning("Importing genomicsqlite failed, falling back to SQLite3")
 
+def print_all_records(db_path, table_name):
+    print("Printing all records...")
+    # Connect to the SQLite database
+    con = sqlite3.connect(db_path)
+    
+    # Create a cursor object
+    cur = con.cursor()
+    
+    # Execute a SELECT query to fetch all records from the table
+    cur.execute(f"SELECT * FROM {table_name}")
+    
+    # Fetch all records from the query result
+    rows = cur.fetchall()
+    
+    # Print column names
+    column_names = [description[0] for description in cur.description]
+    print(f"Column names: {column_names}")
+    
+    # Print each record
+    for row in rows:
+        print(row)
+    
+    # Close the connection
+    con.close()
+
+def check_tables(path):
+    con = sqlite3.connect(str(path))
+    cursor = con.cursor()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = cursor.fetchall()
+    con.close()
+    print(f"Current tables: {tables}")
 
 def init_sqlite_db(path, force=False):
     """Initialises a cblaster SQLite3 database file at a given path.
@@ -43,7 +75,7 @@ def init_sqlite_db(path, force=False):
 
     con = sqlite3.connect(str(path))
     cur = con.cursor()
-    cur.executescript(sql.SCHEMA)
+    con.executescript(sql.SCHEMA)
     con.commit()
     con.close()
 
@@ -58,10 +90,10 @@ def seqrecords_to_sqlite(tuples, database):
         con = sqlite3.connect(str(database))
         cur = con.cursor()
         cur.executemany(sql.INSERT, tuples)
+        con.commit()
         con.close()
     
     except Exception as e:
-    # except sqlite3.IntegrityError:
         LOG.exception("Failed to insert %i records with error %s", len(tuples), str(e))
 
 
